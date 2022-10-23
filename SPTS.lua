@@ -3,6 +3,7 @@ local MainUI = UILibrary:Load("ExecutionerX")
 local AutoFarm = MainUI:CreatePage("Farming",true,true)
 local Teleport = MainUI:CreatePage("Teleport",true,false)
 
+
 local RunS = game:GetService("RunService")
 local Died = false
 
@@ -24,9 +25,16 @@ local BT_Areas = {
     ["Red Acid"] = game:GetService("Workspace").Map.TrainingArea.LavaPart2.CFrame,
     ["Green Acid"] = CFrame.new(-284.019501, 289.766602, 993.931458)
 }
-
+local Count = 0
 local Player = game:GetService("Players").LocalPlayer
 local Remote = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent")
+if not Player.Character then
+repeat Remote:FireServer({"Respawn"}) wait(1) until Player.Character ~= nil
+end
+game:GetService("Lighting").Blur.Enabled = false
+Player.PlayerGui.IntroGui.Enabled = false
+Player.PlayerGui.ScreenGui.Enabled = true
+
 Player.Idled:Connect(function()
     game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),game.Workspace.CurrentCamera.CFrame)
     wait(1)
@@ -42,6 +50,10 @@ Player.CharacterAdded:Connect(function(c)
         Player.PlayerGui.IntroGui.Enabled = false
         Player.PlayerGui.ScreenGui.Enabled = true
         Died = true
+        Count += 1 
+        if Count > 6 then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ExecutionerScripts/Roblox-Stuff/main/ServerHopper.lua"))()
+        end
     end)
 end)
 Player.Character:WaitForChild("Humanoid").Died:Connect(function()
@@ -51,6 +63,7 @@ Player.Character:WaitForChild("Humanoid").Died:Connect(function()
     Player.PlayerGui.IntroGui.Enabled = false
     Player.PlayerGui.ScreenGui.Enabled = true
     Died = true
+    Count += 1
 end)
 
 getgenv().Fist = false
@@ -64,6 +77,7 @@ getgenv().Toughness = false
 AutoFarm:CreateToggle("Autofarm Fist Strength",function(v)
     getgenv().Fist = v
     while getgenv().Fist == true do
+        pcall(function()
         local QuestData = game:GetService("HttpService"):JSONDecode(Player:WaitForChild("PrivateStats"):WaitForChild("QuestData").Value)
         local FistStrength = Player:WaitForChild("PrivateStats"):WaitForChild("FistStrength").Value
 
@@ -86,6 +100,7 @@ AutoFarm:CreateToggle("Autofarm Fist Strength",function(v)
         elseif QuestData and QuestData.MainQuest and QuestData.MainQuest.No < 4 then
             Remote:FireServer({ "Add_FS_Request", 1 })
         end
+    end)
     RunS.Heartbeat:Wait()
     end
 end)
@@ -115,9 +130,6 @@ AutoFarm:CreateToggle("Autofarm Body Toughness",function(v)
             Player.Character:SetPrimaryPartCFrame(BT_Areas["Ice Bath"])
         end
     RunS.Heartbeat:Wait()
-    end
-    if getgenv().Toughness == false then
-        Remote:FireServer({"Respawn"})
     end
 end)
 
@@ -189,3 +201,7 @@ end)
 AutoFarm:CreateButton("Unequip Weights",function()
     Remote:FireServer({"Weight","Unequip"})
 end)
+
+syn.queue_on_teleport(
+    "loadstring(game:HttpGet('https://raw.githubusercontent.com/ExecutionerScripts/Roblox-Stuff/main/SPTS.lua'))()"
+)
