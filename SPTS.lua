@@ -6,6 +6,7 @@ local Teleport = MainUI:CreatePage("Teleport",true,false)
 
 local RunS = game:GetService("RunService")
 local Died = false
+repeat wait() until game:IsLoaded()
 
 local FS_Areas = {
     ["Rock"] = game:GetService("Workspace").Map["Training_Decorations"].FistStrength.TrainingRock.CFrame,
