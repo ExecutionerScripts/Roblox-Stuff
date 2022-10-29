@@ -6,31 +6,29 @@ local Teleport = MainUI:CreatePage("Teleport",true,false)
 
 local RunS = game:GetService("RunService")
 local Died = false
-repeat wait(1) until game:IsLoaded()
-
+repeat wait() until game:IsLoaded()
+local Map = game:GetService("Workspace"):WaitForChild("Map")
 local FS_Areas = {
-    ["Rock"] = game:GetService("Workspace").Map["Training_Decorations"].FistStrength.TrainingRock.CFrame,
-    ["Crystal"] = game:GetService("Workspace").Map["Training_Decorations"].FistStrength.TrainingCrystal.Part.CFrame,
-    ["Blue Star"] = game:GetService("Workspace").Map.TrainingArea.StarFSTraining1.CFrame,
-    ["Green Star"] = game:GetService("Workspace").Map.TrainingArea.StarFSTraining2.CFrame,
-    ["Red Star"] = game:GetService("Workspace").Map.TrainingArea.StarFSTraining3.CFrame
+    ["Rock"] = Map["Training_Decorations"].FistStrength.TrainingRock.CFrame,
+    ["Crystal"] = Map["Training_Decorations"].FistStrength.TrainingCrystal.Part.CFrame,
+    ["Blue Star"] = Map.TrainingArea.StarFSTraining1.CFrame,
+    ["Green Star"] = Map.TrainingArea.StarFSTraining2.CFrame,
+    ["Red Star"] = Map.TrainingArea.StarFSTraining3.CFrame
 }
 
 local BT_Areas = {
-    ["Ice Bath"] = game:GetService("Workspace").Map["Training_Decorations"].BodyToughness.ColdBath.Water.CFrame,
-    ["Fire Bath"] = game:GetService("Workspace").Map["Training_Decorations"].BodyToughness.FireBath.FirePart.CFrame * CFrame.new(0,4,0),
-    ["Ice Bath 2"] = game:GetService("Workspace").Map["Training_Decorations"].BodyToughness.IceBath.IcePart.CFrame,
-    ["Tornado"] = game:GetService("Workspace").Map["Training_Decorations"].BodyToughness.Tornado.Smoke.CFrame,
-    ["Volcano"] = game:GetService("Workspace").Map["Training_Decorations"].BodyToughness.Volcano.Lava.LavaPart.CFrame,
-    ["HellFire"] = game:GetService("Workspace").Map["Training_Decorations"].BodyToughness.GreenFireBBEffectPart.CFrame,
-    ["Red Acid"] = game:GetService("Workspace").Map.TrainingArea.LavaPart2.CFrame,
+    ["Ice Bath"] = Map["Training_Decorations"].BodyToughness.ColdBath.Water.CFrame,
+    ["Fire Bath"] = Map["Training_Decorations"].BodyToughness.FireBath.FirePart.CFrame * CFrame.new(0,4,0),
+    ["Ice Bath 2"] = Map["Training_Decorations"].BodyToughness.IceBath.IcePart.CFrame,
+    ["Tornado"] = Map["Training_Decorations"].BodyToughness.Tornado.Smoke.CFrame,
+    ["Volcano"] = Map["Training_Decorations"].BodyToughness.Volcano.Lava.LavaPart.CFrame,
+    ["HellFire"] = Map["Training_Decorations"].BodyToughness.GreenFireBBEffectPart.CFrame,
+    ["Red Acid"] = Map.TrainingArea.LavaPart2.CFrame,
     ["Green Acid"] = CFrame.new(-284.019501, 289.766602, 993.931458)
 }
 local Count = 0
 local Player = game:GetService("Players").LocalPlayer
 local Remote = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent")
-Player.PlayerGui:WaitForChild("IntroGui")
-repeat wait() until Player.PlayerGui:FindFirstChild("IntroGui") ~= nil
 if not Player.Character then
 repeat Remote:FireServer({"Respawn"}) wait(1) until Player.Character ~= nil
 end
