@@ -45,7 +45,7 @@ end)
 Player.CharacterAdded:Connect(function(c)
     Died = false
     c:WaitForChild("Humanoid").Died:Connect(function()
-        wait(5)
+        wait(8)
         Remote:FireServer({"Respawn"})
         game:GetService("Lighting").Blur.Enabled = false
         Player.PlayerGui.IntroGui.Enabled = false
@@ -58,7 +58,7 @@ Player.CharacterAdded:Connect(function(c)
     end)
 end)
 Player.Character:WaitForChild("Humanoid").Died:Connect(function()
-    wait(5)
+    wait(8)
     Remote:FireServer({"Respawn"})
     game:GetService("Lighting").Blur.Enabled = false
     Player.PlayerGui.IntroGui.Enabled = false
@@ -103,6 +103,9 @@ AutoFarm:CreateToggle("Autofarm Fist Strength",function(v)
         end
     end)
     RunS.Heartbeat:Wait()
+    if Died == true then
+        repeat wait() until Died == false
+        end
     end
 end)
 
@@ -131,6 +134,9 @@ AutoFarm:CreateToggle("Autofarm Body Toughness",function(v)
             Player.Character:SetPrimaryPartCFrame(BT_Areas["Ice Bath"])
         end
     RunS.Heartbeat:Wait()
+    if Died == true then
+        repeat wait() until Died == false
+        end
     end
 end)
 
@@ -144,6 +150,9 @@ AutoFarm:CreateToggle("Autofarm  Psychic Power",function(v)
             Remote:FireServer({"+PP1"})
         end
         RunS.Heartbeat:Wait()
+        if Died == true then
+            repeat wait() until Died == false
+            end
     end
 end)
 
@@ -170,6 +179,9 @@ AutoFarm:CreateToggle("Autofarm  Jump Force",function(v)
             Remote:FireServer({"Add_JF_Request",1})
         end
         RunS.Heartbeat:Wait()
+        if Died == true then
+            repeat wait() until Died == false
+            end
     end
 end)
 
@@ -197,6 +209,9 @@ AutoFarm:CreateToggle("Autofarm  Movement Speed",function(v)
         end
 
         RunS.Heartbeat:Wait()
+        if Died == true then
+            repeat wait() until Died == false
+            end
     end
 end)
 AutoFarm:CreateButton("Unequip Weights",function()
