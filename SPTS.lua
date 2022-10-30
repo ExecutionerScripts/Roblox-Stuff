@@ -217,7 +217,10 @@ end)
 AutoFarm:CreateButton("Unequip Weights",function()
     Remote:FireServer({"Weight","Unequip"})
 end)
+AutoFarm:CreateButton("Server Hop",function()
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/ExecutionerScripts/Roblox-Stuff/main/SPTS.lua'))()
 
+end)
 syn.queue_on_teleport(
     "loadstring(game:HttpGet('https://raw.githubusercontent.com/ExecutionerScripts/Roblox-Stuff/main/SPTS.lua'))()"
 )
