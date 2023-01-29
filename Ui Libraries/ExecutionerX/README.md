@@ -1,4 +1,4 @@
 ## Hi
+```lua
+print("Hi")
 ```
-lua
-print("Hi")```
