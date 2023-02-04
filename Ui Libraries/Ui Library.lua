@@ -455,7 +455,6 @@ Background.BorderSizePixel = 0
 Background.Position = UDim2.new(0, 0, -0.0394737124, 0)
 Background.Size = UDim2.new(0, 297, 0, 5)
 
-
 -----Variables-----
 local mouse = game.Players.LocalPlayer:GetMouse()
 local uis = game:GetService("UserInputService")
