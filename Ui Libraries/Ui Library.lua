@@ -163,8 +163,9 @@ PageContainer.Parent = Main
 
 
     local InsideUi = {}
+    local  count = 0
 
-    function InsideUi:CreatePage(TabName,SearchBar,IsMainPage)
+    function InsideUi:CreatePage(TabName,SearchBar)
         TabName = TabName or "Tab"
         SearchBar = SearchBar or false
         
@@ -205,17 +206,14 @@ Tab.MouseButton1Click:Connect(function ()
 end)
 PageContainer.Name = "PageContainer"
 PageContainer.Parent = Main
-
 Page.Name = TabName .. "Page"
 Page.Parent = PageContainer
 Page.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 Page.BorderSizePixel = 0
 Page.Position = UDim2.new(0.348088533, 0, 0.118749999, 0)
 Page.Size = UDim2.new(0, 315, 0, 275)
-Page.Visible = false
-if IsMainPage == true then
-    Page.Visible = true
-end
+Page.Visible = ((count == 0 and true) or false)
+
 Display.Name = "Display"
 Display.Parent = Page
 Display.Active = true
@@ -321,10 +319,8 @@ Page.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 Page.BorderSizePixel = 0
 Page.Position = UDim2.new(0.348088533, 0, 0.118749999, 0)
 Page.Size = UDim2.new(0, 315, 0, 275)
-Page.Visible = false
-if IsMainPage == true then
-    Page.Visible = true
-end
+Page.Visible = ((count == 0 and true) or false)
+
 Display.Name = "Display"
 Display.Parent = Page
 Display.Active = true
@@ -344,7 +340,7 @@ DisplayListLayout.Padding = UDim.new(0, 5)
 DisplayListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
     Display.CanvasSize = UDim2.new(0,0,0,DisplayListLayout.AbsoluteContentSize.Y)
 end)
-
+count +=  1
 end
 
 local Components = {}
