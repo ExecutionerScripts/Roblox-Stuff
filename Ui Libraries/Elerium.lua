@@ -660,15 +660,6 @@ local checks = {
 	["binding"] = false,
 }
 
-UIS.InputBegan:Connect(function(input, gameProcessed)
-	if input.KeyCode == ((typeof(ui_options.toggle_key) == "EnumItem") and ui_options.toggle_key or Enum.KeyCode.RightShift) then
-		if script.Parent then
-			if not checks.binding then
-				script.Parent.Enabled = not script.Parent.Enabled
-			end
-		end
-	end
-end)
 
 local function Resize(part, new, _delay)
 	_delay = _delay or 0.5
@@ -874,6 +865,18 @@ function library:AddWindow(title, options)
 		UIS.InputEnded:Connect(function(inputObject)
 			if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 				Held = false
+			end
+		end)
+	end
+
+	do--Toggle UI
+		UIS.InputBegan:Connect(function(input, gameProcessed)
+			if input.KeyCode == ((typeof(options.toggle_key) == "EnumItem") and options.toggle_key or Enum.KeyCode.RightShift) then
+				if script.Parent then
+					if not checks.binding then
+						script.Parent.Enabled = not script.Parent.Enabled
+					end
+				end
 			end
 		end)
 	end
