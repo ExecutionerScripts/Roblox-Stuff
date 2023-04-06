@@ -753,8 +753,11 @@ end
 local windows = 0
 local library = {
 	Flags = {
-		Saves = {}
+	},
+	Saves = {
+
 	}
+
 }
 
 local function format_windows()
@@ -826,7 +829,7 @@ function library:AddWindow(title, options)
 	do 
 		if isfolder(options.configs_folder) then
 			if isfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json") then
-				library.Flags.Saves =  HttpS:JSONDecode(readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json"))
+				library.Saves =  HttpS:JSONDecode(readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json"))
 			end
 		end
 	end
@@ -1087,8 +1090,8 @@ function library:AddWindow(title, options)
 							pcall(callback,library.Flags[flag])
 						end
 
-						if options.save_configs and library.Flags.Saves[flag] then
-							switch_data:Set(library.Flags.Saves[flag])
+						if options.save_configs and library.Saves[flag] then
+							switch_data:Set(library.Saves[flag])
 						end
 
 						return switch_data, switch
