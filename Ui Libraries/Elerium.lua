@@ -1265,12 +1265,12 @@ function library:AddWindow(title, options)
 				            MouseButton2 = "Mouse2"
 				        }
 
-						library.Flags[flag] = keybind_options.standard
+						library.Flags[flag] = keybind_options.standard.Name
 
 						function keybind_data:SetKeybind(Keybind)
 							local key = shortkeys[Keybind.Name] or Keybind.Name
 							input.Text = key
-							library.Flags[flag] = Keybind
+							library.Flags[flag] = Keybind.Name
 							saveConfigs()
 						end
 
@@ -1282,7 +1282,7 @@ function library:AddWindow(title, options)
 								end)
 								return
 							end
-							if a.KeyCode == library.Flags[flag] and not b then
+							if a.KeyCode == Enum.KeyCode[library.Flags[flag]] and not b then
 								pcall(callback, keybind)
 							end
 						end)
