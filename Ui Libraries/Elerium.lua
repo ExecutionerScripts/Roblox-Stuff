@@ -1097,13 +1097,16 @@ function library:AddWindow(title, options)
 						return switch_data, switch
 					end
 
-					function tab_data:AddTextBox(textbox_text, callback, textbox_options)
+					function tab_data:AddTextBox(textbox_text, callback, textbox_options,flag)
+						local textbox_data = {}
+
 						textbox_text = tostring(textbox_text or "New TextBox")
 						callback = typeof(callback) == "function" and callback or function()end
 						textbox_options = typeof(textbox_options) == "table" and textbox_options or {["clear"] = true}
 						textbox_options = {
 							["clear"] = ((textbox_options.clear) == true)
 						}
+						flag = tostring(flag or textbox_text)
 
 						local textbox = Prefabs:FindFirstChild("TextBox"):Clone()
 
@@ -1112,9 +1115,17 @@ function library:AddWindow(title, options)
 						textbox.ZIndex = textbox.ZIndex + (windows * 10)
 						textbox:GetChildren()[1].ZIndex = textbox:GetChildren()[1].ZIndex + (windows * 10)
 
+						function textbox_data:Set(text)
+							library.Flags[flag] = tostring(text)
+							textbox.Text = text
+							pcall(callback,textbox.Text)
+							saveConfigs()
+						end
+
 						textbox.FocusLost:Connect(function(ep)
 							if ep then
 								if #textbox.Text > 0 then
+									library.Flags[flag] = textbox.Text
 									pcall(callback, textbox.Text)
 									if textbox_options.clear then
 										textbox.Text = ""
@@ -1123,10 +1134,14 @@ function library:AddWindow(title, options)
 							end
 						end)
 
-						return textbox
+						if options.save_configs and library.Saves[flag] then
+							textbox_data:Set(library.Saves[flag])
+						end
+
+						return textbox_data,textbox
 					end
 
-					function tab_data:AddSlider(slider_text, callback, slider_options)
+					function tab_data:AddSlider(slider_text, callback, slider_options,flag)
 						local slider_data = {}
 
 						slider_text = tostring(slider_text or "New Slider")
@@ -1137,6 +1152,7 @@ function library:AddWindow(title, options)
 							["max"] = slider_options.max or 100,
 							["readonly"] = slider_options.readonly or false,
 						}
+						flag = tostring(flag or slider_text)
 
 						local slider = Prefabs:FindFirstChild("Slider"):Clone()
 
@@ -1193,10 +1209,11 @@ function library:AddWindow(title, options)
 												local minv = slider_options.min
 												local diff = maxv - minv
 
-												local sel_value = math.floor(((diff / 100) * p) + minv)
+												library.Flags[flag] = math.floor(((diff / 100) * p) + minv)
 
-												value.Text = tostring(sel_value)
-												pcall(callback, sel_value)
+												value.Text = tostring(library.Flags[flag])
+												pcall(callback, library.Flags[flag])
+												saveConfigs()
 
 												RS.Heartbeat:Wait()
 											end
@@ -1221,13 +1238,18 @@ function library:AddWindow(title, options)
 								local minv = slider_options.min
 								local diff = maxv - minv
 
-								local sel_value = math.floor(((diff / 100) * p) + minv)
+								library.Flags[flag] = math.floor(((diff / 100) * p) + minv)
 
-								value.Text = tostring(sel_value)
-								pcall(callback, sel_value)
+								value.Text = tostring(library.Flags[flag])
+								pcall(callback, library.Flags[flag])
+								saveConfigs()
 							end
 
 							slider_data:Set(slider_options["min"])
+						end
+
+						if options.save_configs and library.Saves[flag] then
+							slider_data:Set(library.Saves[flag])
 						end
 
 						return slider_data, slider
@@ -1296,6 +1318,10 @@ function library:AddWindow(title, options)
 							local a, b = UIS.InputBegan:Wait()
 							keybind_data:SetKeybind(a.KeyCode)
 						end)
+
+						if options.save_configs and library.Saves[flag] then
+							keybind_data:Set(library.Saves[flag])
+						end
 
 						return keybind_data, keybind
 					end
