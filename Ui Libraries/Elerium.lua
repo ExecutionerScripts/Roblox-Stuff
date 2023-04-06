@@ -1305,7 +1305,7 @@ function library:AddWindow(title, options)
 								return
 							end
 							if a.KeyCode == Enum.KeyCode[library.Flags[flag]] and not b then
-								pcall(callback, keybind)
+								pcall(callback, Enum.KeyCode[library.Flags[flag]])
 							end
 						end)
 
@@ -1320,7 +1320,7 @@ function library:AddWindow(title, options)
 						end)
 
 						if options.save_configs and library.Saves[flag] then
-							keybind_data:Set(library.Saves[flag])
+							keybind_data:SetKeybind(Enum.KeyCode[library.Saves[flag]])
 						end
 
 						return keybind_data, keybind
