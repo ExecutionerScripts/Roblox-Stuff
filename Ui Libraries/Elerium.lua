@@ -820,11 +820,12 @@ function library:AddWindow(title, options)
 			makefolder(options.configs_folder)
 		end
 		if not options.save_configs then return end
-		writefile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json")
+		writefile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json",HttpS:JSONEncode(library.Flags))
 	end
 	--Load Saves
-	library.Flags.Saves =  readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json")
-
+	do 
+	library.Flags.Saves =  (readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json")) and readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json") or {}
+	end
 	local Resizer = Window:WaitForChild("Resizer")
 
 	local window_data = {}
