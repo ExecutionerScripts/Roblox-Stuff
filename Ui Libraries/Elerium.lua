@@ -824,7 +824,11 @@ function library:AddWindow(title, options)
 	end
 	--Load Saves
 	do 
-	library.Flags.Saves =  (readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json")) and readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json") or {}
+		if isfolder(options.configs_folder) then
+			if isfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json") then
+				library.Flags.Saves =  HttpS:JSONDecode(readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json"))
+			end
+		end
 	end
 	local Resizer = Window:WaitForChild("Resizer")
 
