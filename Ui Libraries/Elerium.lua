@@ -1233,7 +1233,7 @@ function library:AddWindow(title, options)
 						return slider_data, slider
 					end
 
-					function tab_data:AddKeybind(keybind_name, callback, keybind_options)
+					function tab_data:AddKeybind(keybind_name, callback, keybind_options,flag)
 						local keybind_data = {}
 
 						keybind_name = tostring(keybind_name or "New Keybind")
@@ -1242,6 +1242,7 @@ function library:AddWindow(title, options)
 						keybind_options = {
 							["standard"] = keybind_options.standard or Enum.KeyCode.RightShift,
 						}
+						flag = tostring(flag or keybind_name)
 
 						local keybind = Prefabs:FindFirstChild("Keybind"):Clone()
 						local input = keybind:FindFirstChild("Input")
@@ -1264,12 +1265,13 @@ function library:AddWindow(title, options)
 				            MouseButton2 = "Mouse2"
 				        }
 
-						local keybind = keybind_options.standard
+						library.Flags[flag] = keybind_options.standard
 
 						function keybind_data:SetKeybind(Keybind)
 							local key = shortkeys[Keybind.Name] or Keybind.Name
 							input.Text = key
-							keybind = Keybind
+							library.Flags[flag] = Keybind
+							saveConfigs()
 						end
 
 						UIS.InputBegan:Connect(function(a, b)
@@ -1280,7 +1282,7 @@ function library:AddWindow(title, options)
 								end)
 								return
 							end
-							if a.KeyCode == keybind and not b then
+							if a.KeyCode == library.Flags[flag] and not b then
 								pcall(callback, keybind)
 							end
 						end)
