@@ -9,6 +9,8 @@ local ui_options = {
 	min_size = Vector2.new(400, 300),
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = true,
+	configs_folder = "Elerium",
+	save_configs = true,
 }
 
 do
@@ -649,6 +651,7 @@ local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RS = game:GetService("RunService")
 local ps = game:GetService("Players")
+local HttpS = game:GetService("HttpService")
 
 local p = ps.LocalPlayer
 local mouse = p:GetMouse()
@@ -748,7 +751,11 @@ local function ripple(button, x, y)
 end
 
 local windows = 0
-local library = {}
+local library = {
+	Flags = {
+		Saves = {}
+	}
+}
 
 local function format_windows()
 	local ull = Prefabs:FindFirstChild("UIListLayout"):Clone()
@@ -771,6 +778,7 @@ end
 function library:FormatWindows()
 	format_windows()
 end
+
 
 function library:AddWindow(title, options)
 	windows = windows + 1
@@ -806,6 +814,16 @@ function library:AddWindow(title, options)
 		end)
 
 	end
+
+	local function saveConfigs()
+		if not isfolder(options.configs_folder) then
+			makefolder(options.configs_folder)
+		end
+		if not options.save_configs then return end
+		writefile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json")
+	end
+	--Load Saves
+	library.Flags.Saves =  readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json")
 
 	local Resizer = Window:WaitForChild("Resizer")
 
@@ -869,8 +887,9 @@ function library:AddWindow(title, options)
 		end)
 	end
 
-	do--Toggle UI
+	do--Toggle Window
 		UIS.InputBegan:Connect(function(input, gameProcessed)
+			if gameProcessed then return end 
 			if input.KeyCode == ((typeof(options.toggle_key) == "EnumItem") and options.toggle_key or Enum.KeyCode.RightShift) then
 				if script.Parent then
 					if not checks.binding then
@@ -1022,11 +1041,12 @@ function library:AddWindow(title, options)
 						return button
 					end
 
-					function tab_data:AddSwitch(switch_text, callback) -- [Switch]
+					function tab_data:AddSwitch(switch_text, callback,flag) -- [Switch]
 						local switch_data = {}
 
 						switch_text = tostring(switch_text or "New Switch")
 						callback = typeof(callback) == "function" and callback or function()end
+						flag = tostring(flag or switch_text)
 
 						local switch = Prefabs:FindFirstChild("Switch"):Clone()
 
@@ -1046,17 +1066,24 @@ function library:AddWindow(title, options)
 							end
 						end)
 
-						local toggled = false
+						library.Flags[flag] = false
+
 						switch.MouseButton1Click:Connect(function()
-							toggled = not toggled
-							switch.Text = toggled and utf8.char(10003) or ""
-							pcall(callback, toggled)
+							library.Flags[flag] = not library.Flags[flag]
+							switch.Text = library.Flags[flag] and utf8.char(10003) or ""
+							saveConfigs()
+							pcall(callback, library.Flags[flag])
 						end)
 
 						function switch_data:Set(bool)
-							toggled = (typeof(bool) == "boolean") and bool or false
-							switch.Text = toggled and utf8.char(10003) or ""
-							pcall(callback,toggled)
+							library.Flags[flag] = (typeof(bool) == "boolean") and bool or false
+							switch.Text = library.Flags[flag] and utf8.char(10003) or ""
+							saveConfigs()
+							pcall(callback,library.Flags[flag])
+						end
+
+						if options.save_configs and library.Flags.Saves[flag] then
+							switch_data:Set(library.Flags.Saves[flag])
 						end
 
 						return switch_data, switch
