@@ -823,13 +823,13 @@ function library:AddWindow(title, options)
 			makefolder(options.configs_folder)
 		end
 		if not options.save_configs then return end
-		writefile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json",HttpS:JSONEncode(library.Flags))
+		writefile(options.configs_folder.. "/" .. tostring(game.PlaceId.."_")..tostring(title)..".txt",HttpS:JSONEncode(library.Flags))
 	end
 	--Load Saves
 	do 
 		if isfolder(options.configs_folder) then
-			if isfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json") then
-				library.Saves =  HttpS:JSONDecode(readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json"))
+			if isfile(options.configs_folder.. "/" .. tostring(game.PlaceId.."_")..tostring(title)..".txt") then
+				library.Saves =  HttpS:JSONDecode(readfile(options.configs_folder.. "/" .. tostring(game.PlaceId.."_")..tostring(title)..".txt"))
 			end
 		end
 	end
