@@ -1137,7 +1137,6 @@ function library:AddWindow(title, options)
 								if #textbox.Text > 0 then
 									library.Flags[flag] = textbox.Text
 									pcall(callback, textbox.Text)
-									saveConfigs()
 									if textbox_options.clear then
 										textbox.Text = ""
 									end
@@ -1261,8 +1260,6 @@ function library:AddWindow(title, options)
 
 						if options.save_configs and library.Saves[flag] then
 							slider_data:Set(library.Saves[flag])
-						else
-							slider_data:Set(slider_options["min"])
 						end
 
 						return slider_data, slider
