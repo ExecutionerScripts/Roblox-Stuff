@@ -827,7 +827,7 @@ function library:AddWindow(title, options)
 			makefolder(options.configs_folder .."/".. tostring(game.GameId))
 		end
 		if not isfile(options.configs_folder.."/"..tostring(game.PlaceId).."/"..cleantitle.."_Settings.json") then 
-			writefile(options.configs_folder.."/"..tostring(game.PlaceId).."/"..cleantitle.."_Settings.json",{})
+			writefile(options.configs_folder.."/"..tostring(game.PlaceId).."/"..cleantitle.."_Settings.json","{}")
 		end
 
 		if not options.save_configs then return end
