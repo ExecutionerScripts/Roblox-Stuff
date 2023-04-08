@@ -817,29 +817,19 @@ function library:AddWindow(title, options)
 		end)
 
 	end
-	local cleantitle = string.gsub(title," ","")
+
 	local function saveConfigs()
 		if not isfolder(options.configs_folder) then
 			makefolder(options.configs_folder)
 		end
-		if not isfolder(options.configs_folder .. "/" .. tostring(game.GameId)) then
-			makefolder(options.configs_folder .. "/" .. tostring(game.GameId))
-		end
-		if not isfile(options.configs_folder .. "/" .. tostring(game.PlaceId) .. "/" .. cleantitle .. ".json") then 
-			writefile(options.configs_folder .. "/" .. tostring(game.PlaceId) .. "/" .. cleantitle .. ".json","{}")
-		end
-
 		if not options.save_configs then return end
-
-			writefile(options.configs_folder.. "/" ..tostring(game.PlaceId) .. "/".. cleantitle .. ".json",HttpS:JSONEncode(library.Flags))
-		end
+		writefile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json",HttpS:JSONEncode(library.Flags))
+	end
 	--Load Saves
 	do 
 		if isfolder(options.configs_folder) then
-			if isfile(options.configs_folder .. "/" .. tostring(game.PlaceId) .. "/" .. cleantitle..".json") then
-				library.Saves =  HttpS:JSONDecode(readfile(options.configs_folder .. "/" .. tostring(game.PlaceId) .. "/" .. cleantitle .. ".json"))
-			else
-				writefile(options.configs_folder .. "/" .. tostring(game.PlaceId) .. "/" .. cleantitle .. ".json","{}")
+			if isfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json") then
+				library.Saves =  HttpS:JSONDecode(readfile(options.configs_folder.. "/" ..tostring(game.PlaceId).."_Settings.json"))
 			end
 		end
 	end
@@ -1137,6 +1127,7 @@ function library:AddWindow(title, options)
 								if #textbox.Text > 0 then
 									library.Flags[flag] = textbox.Text
 									pcall(callback, textbox.Text)
+									saveConfigs()
 									if textbox_options.clear then
 										textbox.Text = ""
 									end
@@ -1260,6 +1251,8 @@ function library:AddWindow(title, options)
 
 						if options.save_configs and library.Saves[flag] then
 							slider_data:Set(library.Saves[flag])
+						else
+							slider_data:Set(slider_options["min"])
 						end
 
 						return slider_data, slider
